@@ -6,10 +6,12 @@ class BlackJack {
         this.round = {};
         this.shuffleDeck();
         console.log("Let's Play BlackJack!");
+        return;
     }
 
     startGame = function(){
         this.newHand();
+        return;
     }
 
     newHand = function(){
@@ -18,22 +20,17 @@ class BlackJack {
     }
 
     informHand = function(hand, dealerFirstHand = false, who = "You have", dealer = false){
-        let aceOfSpades = this.hasAceOfSpades(hand) ? "666" : "";
         if(dealerFirstHand){
+            let motorHead = hand[1].motorHead ? hand[1].motorHead : "";
             console.image(`http://static.garrettestrin.com/browserblackjack/images/${hand[1].img}`);
-            console.log(`Dealer is showing: ${hand[1].face} of ${hand[1].suit} ${aceOfSpades}`);
-            console.log(`Totalling ${this.getHandTotal(hand)}`);
+            console.log(`Dealer is showing: ${hand[1].face} of ${hand[1].suit} ${motorHead}`);
+            console.log(`Totalling ${this.getHandTotal(hand, dealerFirstHand)}`);
+            return;
         } else {
             this.showCards(hand);
-            this.tellCards(hand, who, aceOfSpades);
+            this.tellCards(hand, who);
             console.log(`Totalling ${this.getHandTotal(hand)}`);
-            if(this.isBlackJack(hand)){
-                this.blackJack();
-                return;
-            }
-            if(!dealer){
-                this.hitOrStayMessage();
-            }
+            return;
         }
     }
 
@@ -54,10 +51,12 @@ class BlackJack {
         this.round.dealerHand = [deck[1], deck[3]];
         this.discard(4);
         this.informHand(this.round.dealerHand, true, "Dealer has", true);
-        setTimeout(() => this.informHand(this.round.playerHand), 2500);
+        setTimeout(() => this.informHand(this.round.playerHand), 1500);
+        this.hitOrStayMessage();
+        return;
     }
 
-    getHandTotal = function(hand){
+    getHandTotal = function(hand, dealerFirstHand){
         let values = [];
         let hasAce = false;
         for(let card in hand){
@@ -66,11 +65,13 @@ class BlackJack {
             }
             values.push(hand[card].value);
         }
+        if(dealerFirstHand){
+            values.splice(0, 1);
+        }
         const add = (a, b) =>
             a + b
         let total = values.reduce(add);
-        if(hasAce){
-            console.log('has ace');
+        if(hasAce && !dealerFirstHand){
             let totalWithHighAce = total + 10;
             if(totalWithHighAce > total && totalWithHighAce < 22){
                 return totalWithHighAce;
@@ -80,8 +81,10 @@ class BlackJack {
     }
 
     bet = function(bet){
+        this.firstHand = true;
         if(this.deck.length < 8){
             this.shuffleDeck();
+            return;
         }
         if(this.playingHand){
             return "Can't bet right now";
@@ -100,7 +103,7 @@ class BlackJack {
         }
     }
 
-    hit = function(){
+    hit = () => {
         if(this.playingHand && this.currentBet !== null){
             this.round.playerHand.push(this.deck[0]);
             this.discard(1);
@@ -108,15 +111,20 @@ class BlackJack {
             if(this.getHandTotal(this.round.playerHand) > 21){
                 this.showBustMessage()
                 this.endRound();
+            } else {
+                this.hitOrStayMessage();
             }
         } else {
             return "Can't hit right now.";
         }
+        this.firstHand = false;
+        return;
     }
 
     stay = function(){
         if(this.playingHand && this.currentBet !== null){
             this.finishDealerHand();
+            return;
         } else {
             return "Can't stay right now";
         }
@@ -128,10 +136,11 @@ class BlackJack {
         }
     }
 
-    tellCards = function(hand, who, aceOfSpades){
+    tellCards = function(hand, who){
         console.log(`${who}:`);
         for(let card in hand){
-            console.log(`${hand[card].face} of ${hand[card].suit} ${aceOfSpades}`);
+            let motorHead = hand[card].motorHead ? hand[card].motorHead : "";
+            console.log(`${hand[card].face} of ${hand[card].suit} ${motorHead}`);
         }
     }
 
@@ -153,7 +162,8 @@ class BlackJack {
     blackJack = function(){
         let winnings = this.currentBet * 2.5;
         this.playerChips = this.playerChips + winnings;
-        console.log("Black Jack!");
+        this.showBlackJackMessage();
+        this.endRound();
     }
 
     hitForDealer = function(){
@@ -180,7 +190,7 @@ class BlackJack {
         if(playerTotal > dealerTotal){
             let winnings = this.currentBet * 2;
             this.playerChips = this.playerChips + winnings;
-            this.showBustMessage();
+            this.showWinMessage();
         } else if(playerTotal < dealerTotal){
             this.showDealerWinsMessage();
         } else {
@@ -193,47 +203,56 @@ class BlackJack {
     hitOrStayMessage = function(){
         setTimeout(function(){
             console.log("Do you want to hit or stay? Hit by typing blackjack.hit() and stay by typing blackjack.stay()")
-        }, 2000)
+        }, 2500);
+        return;
     }
 
     dealerBustMessage = function(){
         setTimeout(() => {
             console.log("Dealer busts! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total");
-        }, 1000)
+        }, 1000);
+        return;
+    }
+
+    showWinMessage = function(){
+        setTimeout(() => {
+            console.log("You win! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total");
+        }, 1000);
+        return;
     }
 
     showBustMessage = function(){
         setTimeout(() => {
-            console.log("You win! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
-        }, 1000)
+            console.log("You busted! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
+        }, 1000);
+        return;
     }
 
     showDealerWinsMessage = function(){
         setTimeout(() => {
             console.log("Dealer wins! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
-        }, 1000)
+        }, 1000);
+        return;
     }
 
     showPushMessage = function(){
         setTimeout(() => {
             console.log("Push! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
-        }, 1000)
+        }, 1000);
+        return;
     }
 
-    hasAceOfSpades = function(hand){
-        for(let card in hand){
-            if(hand[card].suit == "Spades" && hand[card].face == "Ace"){
-                return true;
-            }
-        }
-        return false;
+    showBlackJackMessage = function(){
+        setTimeout(() => {
+            console.log("Blackjack! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
+        }, 1000);
+        return;
     }
 
     endRound = function(){
         this.playingHand = false;
+        return;
     }
-
-    testhand = JSON.parse('[{"suit":"Hearts","value":1,"face":"Ace","img":"7H.jpg"},{"suit":"Clubs","value":10,"face":10,"img":"10C.jpg"}]');
 }
 
 
@@ -253,6 +272,9 @@ class Deck {
             card.value = values[value];
             card.face = faces[value];
             card.img = this.getImgFileName(card.suit, card.face);
+            if(card.suit == "Spades" && card.face == "Ace"){
+                card.motorHead = "🤘";
+            }
             this.deck.push(card);
         }
       }
