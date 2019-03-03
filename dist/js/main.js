@@ -176,6 +176,8 @@ class BlackJack {
         this.currentBet = null;
         this.playingHand = false;
         this.round = {};
+        this.baseUrl = "https://garrettestrin.github.io/browser_blackjack/images/deck/";
+        this.instanceName = "bj";
         this.shuffleDeck();
         console.log("Let's Play BlackJack!");
         return;
@@ -187,15 +189,16 @@ class BlackJack {
     }
 
     newHand = function(){
-        console.log("How much do you want to bet? Bet by typing blackjack.bet(bet)");
+        let instanceName = this.instanceName;
+        console.log(`How much do you want to bet? You have ${this.playerChips} chips. Bet by typing ` + instanceName + `.bet(bet).`);
         return;
     }
 
     informHand = function(hand, dealerFirstHand = false, who = "You have", dealer = false){
         if(dealerFirstHand){
             let motorHead = hand[1].motorHead ? hand[1].motorHead : "";
-            console.image(`http://static.garrettestrin.com/browserblackjack/images/red_back.jpg`);
-            console.image(`http://static.garrettestrin.com/browserblackjack/images/${hand[1].img}`);
+            console.image(`${this.baseUrl}red_back.jpg`);
+            console.image(`${this.baseUrl}${hand[1].img}`);
             console.log(`Dealer is showing: ${hand[1].face} of ${hand[1].suit} ${motorHead}`);
             console.log(`Totaling ${this.getHandTotal(hand, dealerFirstHand)}`);
             return;
@@ -310,7 +313,7 @@ class BlackJack {
 
     showCards = function(hand){
         for(let card in hand){
-            console.image(`http://static.garrettestrin.com/browserblackjack/images/${hand[card].img}`);
+            console.image(`${this.baseUrl}${hand[card].img}`);
         }
     }
 
@@ -352,6 +355,7 @@ class BlackJack {
             return;
         } else if (this.getHandTotal(this.round.dealerHand) > 21){
             this.informHand(this.round.dealerHand, false, "Dealer has", true);
+            this.addChips();
             this.dealerBustMessage();
             this.endRound();
             return;
@@ -379,52 +383,64 @@ class BlackJack {
     }
 
     hitOrStayMessage = function(){
-        setTimeout(function(){
-            console.log("Do you want to hit or stay? Hit by typing blackjack.hit() and stay by typing blackjack.stay()")
+        setTimeout(() => {
+            let instanceName = this.instanceName;
+            console.log("Do you want to hit or stay? Hit by typing  " + instanceName + ".hit() and stay by typing  " + instanceName + ".stay()")
         }, 2500);
         return;
     }
 
     dealerBustMessage = function(){
         setTimeout(() => {
-            console.log("Dealer busts! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total");
+            let instanceName = this.instanceName;
+            console.log("Dealer busts! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
         }, 1000);
         return;
     }
 
     showWinMessage = function(){
         setTimeout(() => {
-            console.log("You win! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total");
+            let instanceName = this.instanceName;
+            console.log("You win! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
         }, 1000);
         return;
     }
 
     showBustMessage = function(){
         setTimeout(() => {
-            console.log("You busted! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
+            let instanceName = this.instanceName;
+            console.log("You busted! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total")
         }, 1000);
         return;
     }
 
     showDealerWinsMessage = function(){
         setTimeout(() => {
-            console.log("Dealer wins! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
+            let instanceName = this.instanceName;
+            console.log("Dealer wins! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total")
         }, 1000);
         return;
     }
 
     showPushMessage = function(){
         setTimeout(() => {
-            console.log("Push! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
+            let instanceName = this.instanceName;
+            console.log("Push! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total")
         }, 1000);
         return;
     }
 
     showBlackJackMessage = function(){
         setTimeout(() => {
-            console.log("Blackjack! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
+            let instanceName = this.instanceName;
+            console.log("Blackjack! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total")
         }, 2500);
         return;
+    }
+
+    addChips = function(blackJack = false){
+        let bet = this.currentBet;
+        this.playerChips = this.playerChips + (bet * 2);
     }
 
     endRound = function(){
@@ -477,5 +493,5 @@ class Deck {
     }
   }
 
-let blackjack = new BlackJack();
-blackjack.startGame();
+let bj = new BlackJack();
+bj.startGame();
