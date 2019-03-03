@@ -299,6 +299,5 @@ class Deck {
     }
   }
 
-
 let blackjack = new BlackJack();
 blackjack.startGame();
