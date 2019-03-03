@@ -194,14 +194,15 @@ class BlackJack {
     informHand = function(hand, dealerFirstHand = false, who = "You have", dealer = false){
         if(dealerFirstHand){
             let motorHead = hand[1].motorHead ? hand[1].motorHead : "";
+            console.image(`http://static.garrettestrin.com/browserblackjack/images/red_back.jpg`);
             console.image(`http://static.garrettestrin.com/browserblackjack/images/${hand[1].img}`);
             console.log(`Dealer is showing: ${hand[1].face} of ${hand[1].suit} ${motorHead}`);
-            console.log(`Totalling ${this.getHandTotal(hand, dealerFirstHand)}`);
+            console.log(`Totaling ${this.getHandTotal(hand, dealerFirstHand)}`);
             return;
         } else {
             this.showCards(hand);
             this.tellCards(hand, who);
-            console.log(`Totalling ${this.getHandTotal(hand)}`);
+            console.log(`Totaling ${this.getHandTotal(hand)}`);
             return;
         }
     }
@@ -224,7 +225,12 @@ class BlackJack {
         this.discard(4);
         this.informHand(this.round.dealerHand, true, "Dealer has", true);
         setTimeout(() => this.informHand(this.round.playerHand), 1500);
-        this.hitOrStayMessage();
+        let isBlackJack = this.isBlackJack(this.round.playerHand);
+        if(isBlackJack){
+            this.blackJack();
+        } else {
+            this.hitOrStayMessage();
+        }
         return;
     }
 
@@ -417,7 +423,7 @@ class BlackJack {
     showBlackJackMessage = function(){
         setTimeout(() => {
             console.log("Blackjack! Type blackjack.bet() to bet and start the next hand. Type blackjack.myChips() to see your current chips total")
-        }, 1000);
+        }, 2500);
         return;
     }
 
