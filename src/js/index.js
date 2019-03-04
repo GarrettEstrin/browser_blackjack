@@ -241,7 +241,7 @@ class BlackJack {
     dealerBustMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("Dealer busts! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            console.log("Dealer busts! Type  " + instanceName + ".bet() to bet and start the next hand.");
             this.showChipAmountMessage();
         }, 1000);
         return;
@@ -250,7 +250,7 @@ class BlackJack {
     showWinMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("You win! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            console.log("You win! Type  " + instanceName + ".bet() to bet and start the next hand.");
             this.showChipAmountMessage();
         }, 1000);
         return;
@@ -259,7 +259,7 @@ class BlackJack {
     showBustMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("You busted! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            console.log("You busted! Type  " + instanceName + ".bet() to bet and start the next hand.");
             this.showChipAmountMessage();
         }, 1000);
         return;
@@ -268,7 +268,7 @@ class BlackJack {
     showDealerWinsMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("Dealer wins! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            console.log("Dealer wins! Type  " + instanceName + ".bet() to bet and start the next hand.");
             this.showChipAmountMessage();
         }, 1000);
         return;
@@ -277,7 +277,7 @@ class BlackJack {
     showPushMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("Push! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            console.log("Push! Type  " + instanceName + ".bet() to bet and start the next hand.");
             this.showChipAmountMessage();
         }, 1000);
         return;
@@ -286,7 +286,7 @@ class BlackJack {
     showBlackJackMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("Blackjack! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            console.log("Blackjack! Type  " + instanceName + ".bet() to bet and start the next hand.");
             this.showChipAmountMessage();
         }, 2500);
         return;
