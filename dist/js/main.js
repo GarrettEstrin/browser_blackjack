@@ -280,7 +280,7 @@ class BlackJack {
         }
     }
 
-    hit = () => {
+    hit = (double = false) => {
         if(this.playingHand && this.currentBet !== null){
             this.round.playerHand.push(this.deck[0]);
             this.discard(1);
@@ -288,7 +288,7 @@ class BlackJack {
             if(this.getHandTotal(this.round.playerHand) > 21){
                 this.showBustMessage()
                 this.endRound();
-            } else {
+            } else if(!double) {
                 this.hitOrStayMessage();
             }
         } else {
@@ -307,6 +307,26 @@ class BlackJack {
         }
     }
 
+    double = function(){
+        let currentBet = this.currentBet;
+        if(this.playerChips < currentBet){
+            return `You don't have enough chips to double down. You have ${this.playerChips} chips`;
+        }
+        if(this.playingHand && this.currentBet !== null){
+            this.playerChips = this.playerChips - currentBet;
+            this.currentBet = this.currentBet * 2;
+            this.hit(true);
+            setTimeout(() => {
+                if(this.getHandTotal(this.round.playerHand) < 22){
+                    this.finishDealerHand();
+                }
+            }, 1500)
+            
+        } else {
+            return "Can't double-down right now";
+        }
+    }
+
     showCards = function(hand){
         for(let card in hand){
             console.image(`${this.baseUrl}${hand[card].img}`);
@@ -319,6 +339,10 @@ class BlackJack {
             let motorHead = hand[card].motorHead ? hand[card].motorHead : "";
             console.log(`${hand[card].face} of ${hand[card].suit} ${motorHead}`);
         }
+    }
+
+    showChipAmountMessage = function(){
+        console.log(`Your current chip total is ${this.playerChips}.`)
     }
 
     isBlackJack = function(hand){
@@ -381,7 +405,7 @@ class BlackJack {
     hitOrStayMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("Do you want to hit or stay? Hit by typing  " + instanceName + ".hit() and stay by typing  " + instanceName + ".stay()")
+            console.log(`Do you want to hit or stay? Hit by typing ${instanceName}.hit() and stay by typing  ${instanceName}.stay(). You can also double-down by typing ${instanceName}.double()`);
         }, 2500);
         return;
     }
@@ -390,6 +414,7 @@ class BlackJack {
         setTimeout(() => {
             let instanceName = this.instanceName;
             console.log("Dealer busts! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            this.showChipAmountMessage();
         }, 1000);
         return;
     }
@@ -398,6 +423,7 @@ class BlackJack {
         setTimeout(() => {
             let instanceName = this.instanceName;
             console.log("You win! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            this.showChipAmountMessage();
         }, 1000);
         return;
     }
@@ -405,7 +431,8 @@ class BlackJack {
     showBustMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("You busted! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total")
+            console.log("You busted! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            this.showChipAmountMessage();
         }, 1000);
         return;
     }
@@ -413,7 +440,8 @@ class BlackJack {
     showDealerWinsMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("Dealer wins! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total")
+            console.log("Dealer wins! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            this.showChipAmountMessage();
         }, 1000);
         return;
     }
@@ -421,7 +449,8 @@ class BlackJack {
     showPushMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("Push! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total")
+            console.log("Push! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            this.showChipAmountMessage();
         }, 1000);
         return;
     }
@@ -429,7 +458,8 @@ class BlackJack {
     showBlackJackMessage = function(){
         setTimeout(() => {
             let instanceName = this.instanceName;
-            console.log("Blackjack! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total")
+            console.log("Blackjack! Type  " + instanceName + ".bet() to bet and start the next hand. Type  " + instanceName + ".myChips() to see your current chips total");
+            this.showChipAmountMessage();
         }, 2500);
         return;
     }
