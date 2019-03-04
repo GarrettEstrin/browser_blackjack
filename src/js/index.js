@@ -1,17 +1,13 @@
 class BlackJack {
-    constructor() {
+    constructor(instanceName = 'bj') {
         this.playerChips = 100;
         this.currentBet = null;
         this.playingHand = false;
         this.round = {};
         this.baseUrl = "https://garrettestrin.github.io/browser_blackjack/images/deck/";
-        this.instanceName = "bj";
+        this.instanceName = instanceName;
         this.shuffleDeck();
         console.log("Let's Play BlackJack!");
-        return;
-    }
-
-    startGame = function(){
         this.newHand();
         return;
     }
@@ -322,4 +318,3 @@ class Deck {
   }
 
 let bj = new BlackJack();
-bj.startGame();
